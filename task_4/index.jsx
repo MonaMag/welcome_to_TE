@@ -1,48 +1,64 @@
-import { useState } from "react";
+import { useState, ReactNode } from "react";
 
-export const Block1 = ({ mouseEnterCallbak, imgSrc, imgAlt }) => {
+interface BlockProps {
+  mouseEnterCallbak?: () => void
+  children: ReactNode
+}
+
+export const Block = ({mousEnterCallback, children}: BlockProps) => {
   const [isActive, setActive] = useState(false);
 
   const mouseEnterHandler = () => {
     setActive(true);
-    mouseEnterCallbak();
+    mouseEnterCallbak.?();
   };
 
   return (
     <div onMouseEnter={mouseEnterHandler} className={isActive ? "active" : ""}>
-      <img src={imgSrc} alt={imgAlt} />
+      {children}
     </div>
   );
-};
+}
 
-export const Block2 = ({ mouseEnterCallbak, content }) => {
-  const [isActive, setActive] = useState(false);
+// Данные для каждого блока
+interface BlockData {
+  id: number
+  mouseEnterCallbak?: () => void
+  content: ReactNode
+}
 
-  const mouseEnterHandler = () => {
-    setActive(true);
-    mouseEnterCallbak();
-  };
-
-  return (
-    <div onMouseEnter={mouseEnterHandler} className={isActive ? "active" : ""}>
-      <p>{content}</p>
-    </div>
-  );
-};
-
-export const Block3 = ({ mouseEnterCallbak, userData }) => {
-  const [isActive, setActive] = useState(false);
-
-  const mouseEnterHandler = () => {
-    setActive(true);
-    mouseEnterCallbak();
-  };
-
-  return (
-    <div onMouseEnter={mouseEnterHandler} className={isActive ? "active" : ""}>
+const blocksData: BlockData[] = [
+  {
+    id: 1,
+    mouseEnterCallbak: () => console.log("Block-1"),
+    content: <img src="image.png" alt="Block1 Image" />,
+  },
+  {
+    id: 2,
+    mouseEnterCallbak: () => console.log("Block-2"),
+    content: <p>Some text content for Block2</p>,
+  },
+  {
+    id: 3,
+    mouseEnterCallbak: () => console.log("Block-3"),
+    content: (
       <address>
-        country: {userData.country}, street: {userData.street}
+        country: Russia, street: Main Street
       </address>
-    </div>
+    ),
+  },
+];
+
+// Компонент, который рендерит все блоки
+export const BlocksContainer = () => {
+  return (
+    <>
+      {blocksData.map(({ id, mouseEnterCallbak, content }) => (
+        <Block key={id} mouseEnterCallbak={mouseEnterCallbak}>
+          {content}
+        </Block>
+      ))}
+    </>
   );
 };
+
